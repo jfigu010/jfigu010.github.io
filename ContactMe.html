@@ -1,34 +1,44 @@
 <?php
-if(!isset($_POST['submit']))
+if(isset($_POST['submit'])) 
 {
-	//This page should be accessed directly. Need to submit the form.
-	echo "error; you need to submit the form!";
+
+$message=
+'Full Name:	'.$_POST['fullname'].'<br />
+Subject:	'.$_POST['subject'].'<br />
+Email:	'.$_POST['emailid'].'<br />
+Comments:	'.$_POST['comments'].'
+';
+    require "phpmailer/class.phpmailer.php"; //include phpmailer class
+      
+    // Instantiate Class  
+    $mail = new PHPMailer();  
+      
+    // Set up SMTP  
+    $mail->IsSMTP();                // Sets up a SMTP connection  
+    $mail->SMTPAuth = true;         // Connection with the SMTP does require authorization    
+    $mail->SMTPSecure = "ssl";      // Connect using a TLS connection  
+    $mail->Host = "smtp.gmail.com";  //Gmail SMTP server address
+    $mail->Port = 465;  //Gmail SMTP port
+    $mail->Encoding = '7bit';
+    
+    // Authentication  
+    $mail->Username   = "youremail@gmail.com"; // Your full Gmail address
+    $mail->Password   = "yourpassword"; // Your Gmail password
+      
+    // Compose
+    $mail->SetFrom($_POST['emailid'], $_POST['fullname']);
+    $mail->AddReplyTo($_POST['emailid'], $_POST['fullname']);
+    $mail->Subject = "New Contact Form Enquiry";      // Subject (which isn't required)  
+    $mail->MsgHTML($message);
+ 
+    // Send To  
+    $mail->AddAddress("josefigu010@gmail.com", "Jose Figueroa"); // Where to send it - Recipient
+    $result = $mail->Send();		// Send!  
+	$message = $result ? 'Successfully Sent!' : 'Sending Failed!';      
+	unset($mail);
+
 }
-$name = $_POST['name'];
-$visitor_email = $$_POST['email'];
-$message = $_POST['message'];
-
-//Validate first
-if(empty($name)||empty($visitor_email))
-{
-	echo "Name and email are mandatory";
-	exit;
-}
-
-$email_from = 'josefigu010@gmail.com';//My email address here
-$email_subject = "New form submission";
-$email_body = "You have received a new message from the user $name.\n".
-	"email address: $visitor_email\n".
-	"Here is the message:\n $message".
-	
-$to = "josefigu010@gmail.com";//My email address here
-$headers = "From: $email_from \r\n";
-
-//Send the email!
-mail($to,$email_subject,$email_body,$headers);
-//done. redirect to tahnk you page.
 ?>
-
 
 
 <!DOCTYPE HTML>
