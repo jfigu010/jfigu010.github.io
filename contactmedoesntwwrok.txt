@@ -1,3 +1,45 @@
+<?php
+if(isset($_POST['submit'])) 
+{
+
+$message=
+'Full Name:	'.$_POST['fullname'].'<br />
+Subject:	'.$_POST['subject'].'<br />
+Email:	'.$_POST['emailid'].'<br />
+Comments:	'.$_POST['comments'].'
+';
+    require "phpmailer/class.phpmailer.php"; //include phpmailer class
+      
+    // Instantiate Class  
+    $mail = new PHPMailer();  
+      
+    // Set up SMTP  
+    $mail->IsSMTP();                // Sets up a SMTP connection  
+    $mail->SMTPAuth = true;         // Connection with the SMTP does require authorization    
+    $mail->SMTPSecure = "ssl";      // Connect using a TLS connection  
+    $mail->Host = "smtp.gmail.com";  //Gmail SMTP server address
+    $mail->Port = 465;  //Gmail SMTP port
+    $mail->Encoding = '7bit';
+    
+    // Authentication  
+    $mail->Username   = "youremail@gmail.com"; // Your full Gmail address
+    $mail->Password   = "yourpassword"; // Your Gmail password
+      
+    // Compose
+    $mail->SetFrom($_POST['emailid'], $_POST['fullname']);
+    $mail->AddReplyTo($_POST['emailid'], $_POST['fullname']);
+    $mail->Subject = "New Contact Form Enquiry";      // Subject (which isn't required)  
+    $mail->MsgHTML($message);
+ 
+    // Send To  
+    $mail->AddAddress("josefigu010@gmail.com", "Jose Figueroa"); // Where to send it - Recipient
+    $result = $mail->Send();		// Send!  
+	$message = $result ? 'Successfully Sent!' : 'Sending Failed!';      
+	unset($mail);
+
+}
+?>
+
 
 <!DOCTYPE HTML>
 <!--
@@ -56,9 +98,35 @@
 
 					<!-- Form -->
 						<section>
-							<h3>Contact Me</h3>
-								<p>Anything to tell me?<br>Feel free to contact me at: josefigu010@gmail.com for any inquiries.</p>
-							
+							<h3>Contact Form</h3>
+							<form method="post" action="sendEmail.php">
+								<div class="row uniform 50%">
+									<div class="6u 12u$(xsmall)">
+										<input type="text" name="name" id="name" value="" placeholder="Name" />
+									</div>
+									<div class="6u$ 12u$(xsmall)">
+										<input type="email" name="email" id="email" value="" placeholder="Email" />
+									<br>
+									</div>
+									</div>
+									<div class="6u 12u$(small)">
+										<input type="checkbox" id="copy" name="copy">
+										<label for="copy">Email me a copy of this message</label>
+										<input type="checkbox" id="human" name="human" unchecked>
+										<label for="human">I am a human and not a robot</label>
+									</div>
+									<div class="12u$">
+										<textarea name="message" id="message" placeholder="Enter your message" rows="6"></textarea>
+									</div>
+									<div class="12u$">
+										<ul class="actions">
+											<li><input type="submit" value="Send Message" class="special" /></li>
+											<li><input type="reset" value="Reset" /></li>
+										</ul>
+									</div>
+								</div>
+							</form>
+							<p><?php if(!empty($message)) echo $message; ?></p>
 						</section>
 
 		<!-- Footer -->
