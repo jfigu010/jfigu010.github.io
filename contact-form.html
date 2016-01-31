@@ -5,7 +5,6 @@ if(isset($_POST['submit']))
 $message=
 'Full Name:	'.$_POST['fullname'].'<br />
 Subject:	'.$_POST['subject'].'<br />
-Phone:	'.$_POST['phone'].'<br />
 Email:	'.$_POST['emailid'].'<br />
 Comments:	'.$_POST['comments'].'
 ';
@@ -33,7 +32,7 @@ Comments:	'.$_POST['comments'].'
     $mail->MsgHTML($message);
  
     // Send To  
-    $mail->AddAddress("recipientemail@gmail.com", "Recipient Name"); // Where to send it - Recipient
+    $mail->AddAddress("josefigu010@gmail.com", "Jose Figueroa"); // Where to send it - Recipient
     $result = $mail->Send();		// Send!  
 	$message = $result ? 'Successfully Sent!' : 'Sending Failed!';      
 	unset($mail);
@@ -53,8 +52,6 @@ Comments:	'.$_POST['comments'].'
 					  <input type="text" name="fullname" placeholder="Full Name" />
 					  <br />
 					  <input type="text" name="subject" placeholder="Subject" />
-					  <br />
-					  <input type="text" name="phone" placeholder="Phone" />
 					  <br />
 					  <input type="text" name="emailid" placeholder="Email" />
 					  <br />
